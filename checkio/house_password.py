@@ -1,6 +1,7 @@
 '''
-@task_description
+@task_link: https://py.checkio.org/en/mission/house-password/
 
+@task_description
 Stephan and Sophia forget about security and use simple passwords for everything.
 Help Nikola develop a password security check module.
 The password will be considered strong enough if
