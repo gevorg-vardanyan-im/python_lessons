@@ -1,6 +1,0 @@
-In this folder will be stored solutions of tasks listed in 'https://py.checkio.org' site.
-
-To see documentation of desired task use the following methods:
-1. pydoc ./<module_name>.py
-2. pydoc -w ./<module_name>.py
-	google-chrome <module_name>.html
