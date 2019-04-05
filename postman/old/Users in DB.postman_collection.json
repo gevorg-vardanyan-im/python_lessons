@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "03e8be28-8d18-4e80-aa29-0d8e7d7bec84",
+		"name": "Users in DB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Super admin login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c98e3f4a-6e60-4b5b-bf4f-48ab73505f44",
+						"exec": [
+							"// store an access token",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"pm.test(\"check access token\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.accessToken).not.eql(null);",
+							"    pm.expect(jsonData.accessToken).not.eql(\"\");",
+							"});",
+							"",
+							"postman.setEnvironmentVariable(\"access_token\", jsonData.accessToken);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"{{super_admin_name}}\", \n    \"password\":\"{{super_admin_password}}\"\n}"
+				},
+				"url": {
+					"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/auth/login",
+					"protocol": "https",
+					"host": [
+						"pivotus",
+						"{{env}}",
+						"engage",
+						"{{tenant}}",
+						"io"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				},
+				"description": "Login with super admin account to get an access token for the further requests."
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e11e8fea-143a-4351-91b9-68e5aae7ee64",
+						"exec": [
+							"// get all users amount",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"pm.test(\"check users count\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.meta.count).not.eql(null);",
+							"    pm.expect(jsonData.meta.count).not.eql(\"\");",
+							"});",
+							"",
+							"postman.setEnvironmentVariable(\"users_amount\", jsonData.meta.count);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/users",
+					"protocol": "https",
+					"host": [
+						"pivotus",
+						"{{env}}",
+						"engage",
+						"{{tenant}}",
+						"io"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				},
+				"description": "Get all users from the DB.\nThen observe value of 'users_amount' variable in the 'Environment'."
+			},
+			"response": []
+		}
+	]
+}
