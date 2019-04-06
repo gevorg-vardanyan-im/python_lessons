@@ -7,8 +7,6 @@ import os
 import subprocess
 import sys
 import re
-from lxml import etree
-from jinja2 import Environment, FileSystemLoader
 
 
 def read_file(file_name):
@@ -49,15 +47,6 @@ def append_into_file(file_name, data):
             file.close()
 
 
-def string_to_xml(string):
-    try:
-        xml = etree.fromstring(string)
-        return xml
-    except etree.XMLSyntaxError as ex:
-        print ('The provided string is not xml: ' + str(ex))
-        return None
-
-
 def run_command(command):
     print('\n', command)
     subprocess.call(command, shell=True)
@@ -69,13 +58,6 @@ def set_build_status(aggregate_report_total):
             error_msg = 'Build step "Execute shell" marked build as failure due to {error_rate}% errors.'
             print(error_msg.format(error_rate=value))
             sys.exit(-1)
-
-
-def create_render_template(tmpl_path):
-    tmpl_dir = os.path.dirname(tmpl_path)
-    tmpl_file = os.path.basename(tmpl_path)
-    j2_env = Environment(loader=FileSystemLoader(tmpl_dir), trim_blocks=True)
-    return j2_env.get_template(tmpl_file)
 
 
 def replace_content(content, replaced_dict):

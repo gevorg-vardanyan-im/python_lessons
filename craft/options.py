@@ -38,9 +38,9 @@ __tenants = ['pivotus',
 # define logger
 __logger = colorlog.getLogger()
 __logger.setLevel(colorlog.colorlog.logging.DEBUG)
-handler = colorlog.StreamHandler()
-handler.setFormatter(colorlog.ColoredFormatter())
-__logger.addHandler(handler)
+__handler = colorlog.StreamHandler()
+__handler.setFormatter(colorlog.ColoredFormatter())
+__logger.addHandler(__handler)
 
 
 def parse_args():
