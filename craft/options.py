@@ -18,7 +18,10 @@ from craft.utils import read_file
 __help_case = 'Specific case name from the given suite.\n' \
               'Use whitespace to separate multiple cases\' names.'
 __help_loops = 'How many times a suite should be executed.'
-__help_delay = 'Explicit / additional delay between requests in ms.'
+__help_delay = 'Explicit / additional delay between requests ' \
+               '(in milliseconds).'
+__help_data = 'Data file path which should be used ' \
+              'as an input for suite execution.'
 __help_result = 'Directory where all the result files should be stored.'
 __help_template = 'HTML template that should be used '\
                   'to generate a report.'
@@ -106,6 +109,9 @@ def parse_args():
     group_run.add_argument("--delay",
                            type=int,
                            help=__help_delay)
+    group_run.add_argument("--data",
+                           type=str,
+                           help=__help_data)
 
     group_report = parser.add_argument_group("Report parameters")
     result_folder = os.path.join("results",
@@ -137,10 +143,8 @@ def parse_args():
 def get_env_file_path(env, tenant):
     env_file_path = '{env}_{tenant}.postman_environment.json'.format(
         env=env, tenant=tenant)
-    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            os.pardir,
-                                            'envs',
-                                            env_file_path))
+    env_path = os.path.join('envs', env_file_path)
+
     if os.path.isfile(env_path):
         return env_path
     else:
@@ -170,7 +174,6 @@ def check_report_folder(folder):
 def get_args():
     args = parse_args()
     args.root_dir = os.path.dirname(os.path.abspath(__file__))
-    # args_dict = args.__dict__
     # get env path
     env = get_env_file_path(args.environment, args.tenant)
     args.environment = env

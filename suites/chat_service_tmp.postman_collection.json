@@ -1,0 +1,1292 @@
+{
+	"info": {
+		"_postman_id": "952eab1e-1d58-4332-aedd-550dc20ca60e",
+		"name": "chat_service",
+		"description": "This description is intended for chat service API requests' testing.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create_a_conversation",
+			"item": [
+				{
+					"name": "get_status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"schema = {",
+									"  \"definitions\": {},",
+									"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"  \"$id\": \"http://example.com/root.json\",",
+									"  \"type\": \"object\",",
+									"  \"title\": \"The Root Schema\",",
+									"  \"required\": [",
+									"    \"code\",",
+									"    \"description\",",
+									"    \"build\"",
+									"  ],",
+									"  \"properties\": {",
+									"    \"code\": {",
+									"      \"$id\": \"#/properties/code\",",
+									"      \"type\": \"integer\",",
+									"      \"title\": \"The Code Schema\",",
+									"      \"default\": 0,",
+									"      \"examples\": [",
+									"        200",
+									"      ]",
+									"    },",
+									"    \"description\": {",
+									"      \"$id\": \"#/properties/description\",",
+									"      \"type\": \"string\",",
+									"      \"title\": \"The Description Schema\",",
+									"      \"default\": \"\",",
+									"      \"examples\": [",
+									"        \"OK\"",
+									"      ],",
+									"      \"pattern\": \"^(.*)$\"",
+									"    },",
+									"    \"build\": {",
+									"      \"$id\": \"#/properties/build\",",
+									"      \"type\": \"object\",",
+									"      \"title\": \"The Build Schema\",",
+									"      \"required\": [",
+									"        \"artifact\",",
+									"        \"version\",",
+									"        \"buildNumber\"",
+									"      ],",
+									"      \"properties\": {",
+									"        \"artifact\": {",
+									"          \"$id\": \"#/properties/build/properties/artifact\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Artifact Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"engage-authentication-service\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"version\": {",
+									"          \"$id\": \"#/properties/build/properties/version\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Version Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"1.17.1-SNAPSHOT\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"buildNumber\": {",
+									"          \"$id\": \"#/properties/build/properties/buildNumber\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Buildnumber Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"d0ea0ffc11-20190322_205420\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        }",
+									"      }",
+									"    }",
+									"  }",
+									"}",
+									"",
+									"",
+									"pm.test('Schema Validation', function() {",
+									"    ",
+									"    var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"    if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"",
+									"    pm.expect(result.valid).to.be.true;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b9151f44-f4bc-440e-a618-c89911bff369",
+								"exec": [
+									"console.log(\"log\")",
+									"console.info(\"info\")",
+									"console.warn(\"warn\")",
+									"console.error(\"error\")",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status?name={{name}}",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"qa",
+								"engage",
+								"pivotus",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"status"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{name}}"
+								}
+							]
+						},
+						"description": "This API request gets a status of the specific service."
+					},
+					"response": []
+				},
+				{
+					"name": "super admin login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c98e3f4a-6e60-4b5b-bf4f-48ab73505f44",
+								"exec": [
+									"// store an access token",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"check access token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.accessToken).not.eql(null);",
+									"    pm.expect(jsonData.accessToken).not.eql(\"\");",
+									"});",
+									"",
+									"pm.environment.set(\"admin_access_token\", jsonData.accessToken);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"{{super_admin_name}}\", \n    \"password\":\"{{super_admin_password}}\"\n}"
+						},
+						"url": {
+							"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"{{env}}",
+								"engage",
+								"{{tenant}}",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create an agent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c98e3f4a-6e60-4b5b-bf4f-48ab73505f44",
+								"exec": [
+									"// var jsonData = pm.response.json()",
+									"",
+									"",
+									"pm.test(\"check_response_code\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+									"});",
+									"",
+									"",
+									"var response = pm.response",
+									"var agent_id = response.text()",
+									"pm.environment.set(\"agent_id\", agent_id)",
+									"",
+									"pm.test(\"check_created_agent_id\", function () {",
+									"    pm.expect(agent_id).to.match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/);",
+									"});",
+									"",
+									"",
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3e5f64b6-bc57-4518-92bf-1f62ae6d5dab",
+								"exec": [
+									"// get timestamp",
+									"var dateNow= new Date()",
+									"console.log(dateNow.toISOString())",
+									"time = dateNow.valueOf()",
+									"pm.environment.set(\"time\", time)",
+									"",
+									"// set an agent name",
+									"",
+									"var env = pm.environment.get(\"env\")",
+									"var tenant = pm.environment.get(\"tenant\")",
+									"var agent_name = env + \"_\" + tenant + \"_agent\" + time + \"@pivotus.local\"",
+									"pm.environment.set(\"agent_name\", agent_name)",
+									"pm.environment.set(\"user_id\", time)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "Bearer {{admin_access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\":\"{{agent_name}}\",\n    \"lastName\":\"{{time}}\",\n    \"username\":\"{{agent_name}}\",\n    \"identities\":[{\n        \"provider\":\"{{PROVIDER}}\",\n        \"id\":\"{{agent_name}}\",\n        \"password\":\"{{password}}\",\n        \"type\":\"LOCAL\"\n        }],\n        \"roles\":[\"EMPLOYEE\", \"AGENT\"]\n}"
+						},
+						"url": {
+							"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/users",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"{{env}}",
+								"engage",
+								"{{tenant}}",
+								"io"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c98e3f4a-6e60-4b5b-bf4f-48ab73505f44",
+								"exec": [
+									"// var jsonData = pm.response.json()",
+									"",
+									"",
+									"pm.test(\"check_response_code\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+									"});",
+									"",
+									"",
+									"var response = pm.response",
+									"var customer_id = response.text()",
+									"pm.environment.set(\"customer_id\", customer_id)",
+									"",
+									"pm.test(\"check_created_customer_id\", function () {",
+									"    pm.expect(customer_id).to.match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/);",
+									"});",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3e5f64b6-bc57-4518-92bf-1f62ae6d5dab",
+								"exec": [
+									"// get timestamp",
+									"var dateNow= new Date()",
+									"console.log(dateNow.toISOString())",
+									"time = dateNow.valueOf()",
+									"pm.environment.set(\"time\", time)",
+									"",
+									"// set an agent name",
+									"",
+									"var env = pm.environment.get(\"env\")",
+									"var tenant = pm.environment.get(\"tenant\")",
+									"var customer_name = env + \"_\" + tenant + \"_customer\" + time + \"@pivotus.local\"",
+									"pm.environment.set(\"customer_name\", customer_name)",
+									"pm.environment.set(\"user_id\", time)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "Bearer {{admin_access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\":\"{{customer_name}}\",\n    \"lastName\":\"{{time}}\",\n    \"username\":\"{{customer_name}}\",\n    \"identities\":[{\n        \"provider\":\"{{PROVIDER}}\",\n        \"id\":\"{{customer_name}}\",\n        \"password\":\"{{password}}\",\n        \"type\":\"LOCAL\"\n        }],\n        \"roles\":[\"MOBILE_USER\",\"CUSTOMER\"]\n}"
+						},
+						"url": {
+							"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/users",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"{{env}}",
+								"engage",
+								"{{tenant}}",
+								"io"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "customer login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c98e3f4a-6e60-4b5b-bf4f-48ab73505f44",
+								"exec": [
+									"// store an access token",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"check access token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.accessToken).not.eql(null);",
+									"    pm.expect(jsonData.accessToken).not.eql(\"\");",
+									"});",
+									"",
+									"pm.environment.set(\"customer_access_token\", jsonData.accessToken);",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6b84d981-0c5b-491c-a858-d9545fd4e5d6",
+								"exec": [
+									"console.log(\"---wait---\");",
+									"setTimeout(function() {",
+									"    console.log(\"---end of wait---\");",
+									"}, 3000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"{{customer_name}}\", \n    \"password\":\"{{password}}\"\n}"
+						},
+						"url": {
+							"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"{{env}}",
+								"engage",
+								"{{tenant}}",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "select the agent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c98e3f4a-6e60-4b5b-bf4f-48ab73505f44",
+								"exec": [
+									"// validate a response code",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "Bearer {{customer_access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"agent\":\"{{agent_id}}\"\n}"
+						},
+						"url": {
+							"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/agents",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"{{env}}",
+								"engage",
+								"{{tenant}}",
+								"io"
+							],
+							"path": [
+								"api",
+								"agents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a conversation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"check_customer_id\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var customer_id = pm.environment.get(\"customer_id\")",
+									"    pm.expect(jsonData.items[\"0\"].customer.id).to.eql(customer_id);",
+									"});",
+									"pm.test(\"check_conversation_id\", function () {",
+									"    var response = JSON.parse(responseBody);",
+									"    var customer_id = pm.environment.get(\"customer_id\")",
+									"    pm.expect(response.items[\"0\"].id).not.eql(null);",
+									"    pm.expect(response.items[\"0\"].id).not.eql(\"\");",
+									"    var conversation_id = response.items[\"0\"].id",
+									"    pm.environment.set(\"conversation_id\", conversation_id);",
+									"});",
+									"",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"try {",
+									"    var conversation_id = response.items[\"0\"].id",
+									"    pm.environment.set(\"conversation_id\", conversation_id);",
+									"} catch (err) {",
+									"    console.log(\"---catch section---\")",
+									"    console.log(err);",
+									"}",
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b1959fc2-9712-4b97-aa12-8649d8291d7e",
+								"exec": [
+									"console.log(\"---wait---\");",
+									"setTimeout(function() {",
+									"    console.log(\"---end of wait---\");",
+									"}, 3000);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{customer_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/conversations/@mine",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"{{env}}",
+								"engage",
+								"{{tenant}}",
+								"io"
+							],
+							"path": [
+								"api",
+								"conversations",
+								"@mine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var response = JSON.parse(responseBody);",
+									"// console.log(response)",
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "Bearer {{customer_access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.{{env}}.engage.{{tenant}}.io/api/users/{{customer_id}}",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"{{env}}",
+								"engage",
+								"{{tenant}}",
+								"io"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{customer_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_status__cp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"pm.test(\"check_status_code\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "170d89bc-6373-4356-94ac-ac50f21721e4",
+								"exec": [
+									"// tests[`[INFO] Request params: ${JSON.stringify(request.data)}`] = true;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"qa",
+								"engage",
+								"pivotus",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;\ntests[\"[INFO] Response: \" + responseBody] = true;",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2d2dfc81-cb6a-423b-8fe1-8d6182df2aef",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "12f9a9d6-316f-416d-9ad2-5a7d3f0d73f8",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+							"tests[\"[INFO] Response: \" + responseBody] = true;"
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "get_message",
+			"item": [
+				{
+					"name": "get_status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"schema = {",
+									"  \"definitions\": {},",
+									"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"  \"$id\": \"http://example.com/root.json\",",
+									"  \"type\": \"object\",",
+									"  \"title\": \"The Root Schema\",",
+									"  \"required\": [",
+									"    \"code\",",
+									"    \"description\",",
+									"    \"build\"",
+									"  ],",
+									"  \"properties\": {",
+									"    \"code\": {",
+									"      \"$id\": \"#/properties/code\",",
+									"      \"type\": \"integer\",",
+									"      \"title\": \"The Code Schema\",",
+									"      \"default\": 0,",
+									"      \"examples\": [",
+									"        200",
+									"      ]",
+									"    },",
+									"    \"description\": {",
+									"      \"$id\": \"#/properties/description\",",
+									"      \"type\": \"string\",",
+									"      \"title\": \"The Description Schema\",",
+									"      \"default\": \"\",",
+									"      \"examples\": [",
+									"        \"OK\"",
+									"      ],",
+									"      \"pattern\": \"^(.*)$\"",
+									"    },",
+									"    \"build\": {",
+									"      \"$id\": \"#/properties/build\",",
+									"      \"type\": \"object\",",
+									"      \"title\": \"The Build Schema\",",
+									"      \"required\": [",
+									"        \"artifact\",",
+									"        \"version\",",
+									"        \"buildNumber\"",
+									"      ],",
+									"      \"properties\": {",
+									"        \"artifact\": {",
+									"          \"$id\": \"#/properties/build/properties/artifact\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Artifact Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"engage-authentication-service\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"version\": {",
+									"          \"$id\": \"#/properties/build/properties/version\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Version Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"1.17.1-SNAPSHOT\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"buildNumber\": {",
+									"          \"$id\": \"#/properties/build/properties/buildNumber\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Buildnumber Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"d0ea0ffc11-20190322_205420\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        }",
+									"      }",
+									"    }",
+									"  }",
+									"}",
+									"",
+									"",
+									"pm.test('Schema Validation', function() {",
+									"    ",
+									"    var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"    if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"",
+									"    pm.expect(result.valid).to.be.true;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"qa",
+								"engage",
+								"pivotus",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_status_cp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"pm.test(\"check_status_code\", function () {",
+									"    pm.response.to.have.status(301);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bd73aa10-57e0-492d-8844-1624d69d1ad9",
+								"exec": [
+									"console.log(data[\"username\"])"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"qa",
+								"engage",
+								"pivotus",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c4da7d96-f7d3-419d-97f6-d72ef64eafc0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab7a4d95-3ad2-4738-9776-74a11ba723c7",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "get_message_2",
+			"item": [
+				{
+					"name": "get_status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"schema = {",
+									"  \"definitions\": {},",
+									"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"  \"$id\": \"http://example.com/root.json\",",
+									"  \"type\": \"object\",",
+									"  \"title\": \"The Root Schema\",",
+									"  \"required\": [",
+									"    \"code\",",
+									"    \"description\",",
+									"    \"build\"",
+									"  ],",
+									"  \"properties\": {",
+									"    \"code\": {",
+									"      \"$id\": \"#/properties/code\",",
+									"      \"type\": \"integer\",",
+									"      \"title\": \"The Code Schema\",",
+									"      \"default\": 0,",
+									"      \"examples\": [",
+									"        200",
+									"      ]",
+									"    },",
+									"    \"description\": {",
+									"      \"$id\": \"#/properties/description\",",
+									"      \"type\": \"string\",",
+									"      \"title\": \"The Description Schema\",",
+									"      \"default\": \"\",",
+									"      \"examples\": [",
+									"        \"OK\"",
+									"      ],",
+									"      \"pattern\": \"^(.*)$\"",
+									"    },",
+									"    \"build\": {",
+									"      \"$id\": \"#/properties/build\",",
+									"      \"type\": \"object\",",
+									"      \"title\": \"The Build Schema\",",
+									"      \"required\": [",
+									"        \"artifact\",",
+									"        \"version\",",
+									"        \"buildNumber\"",
+									"      ],",
+									"      \"properties\": {",
+									"        \"artifact\": {",
+									"          \"$id\": \"#/properties/build/properties/artifact\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Artifact Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"engage-authentication-service\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"version\": {",
+									"          \"$id\": \"#/properties/build/properties/version\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Version Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"1.17.1-SNAPSHOT\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"buildNumber\": {",
+									"          \"$id\": \"#/properties/build/properties/buildNumber\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Buildnumber Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"d0ea0ffc11-20190322_205420\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        }",
+									"      }",
+									"    }",
+									"  }",
+									"}",
+									"",
+									"",
+									"pm.test('Schema Validation', function() {",
+									"    ",
+									"    var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"    if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"",
+									"    pm.expect(result.valid).to.be.true;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"qa",
+								"engage",
+								"pivotus",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_status Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"schema = {",
+									"  \"definitions\": {},",
+									"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",",
+									"  \"$id\": \"http://example.com/root.json\",",
+									"  \"type\": \"object\",",
+									"  \"title\": \"The Root Schema\",",
+									"  \"required\": [",
+									"    \"code\",",
+									"    \"description\",",
+									"    \"build\"",
+									"  ],",
+									"  \"properties\": {",
+									"    \"code\": {",
+									"      \"$id\": \"#/properties/code\",",
+									"      \"type\": \"integer\",",
+									"      \"title\": \"The Code Schema\",",
+									"      \"default\": 0,",
+									"      \"examples\": [",
+									"        200",
+									"      ]",
+									"    },",
+									"    \"description\": {",
+									"      \"$id\": \"#/properties/description\",",
+									"      \"type\": \"string\",",
+									"      \"title\": \"The Description Schema\",",
+									"      \"default\": \"\",",
+									"      \"examples\": [",
+									"        \"OK\"",
+									"      ],",
+									"      \"pattern\": \"^(.*)$\"",
+									"    },",
+									"    \"build\": {",
+									"      \"$id\": \"#/properties/build\",",
+									"      \"type\": \"object\",",
+									"      \"title\": \"The Build Schema\",",
+									"      \"required\": [",
+									"        \"artifact\",",
+									"        \"version\",",
+									"        \"buildNumber\"",
+									"      ],",
+									"      \"properties\": {",
+									"        \"artifact\": {",
+									"          \"$id\": \"#/properties/build/properties/artifact\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Artifact Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"engage-authentication-service\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"version\": {",
+									"          \"$id\": \"#/properties/build/properties/version\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Version Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"1.17.1-SNAPSHOT\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        },",
+									"        \"buildNumber\": {",
+									"          \"$id\": \"#/properties/build/properties/buildNumber\",",
+									"          \"type\": \"string\",",
+									"          \"title\": \"The Buildnumber Schema\",",
+									"          \"default\": \"\",",
+									"          \"examples\": [",
+									"            \"d0ea0ffc11-20190322_205420\"",
+									"          ],",
+									"          \"pattern\": \"^(.*)$\"",
+									"        }",
+									"      }",
+									"    }",
+									"  }",
+									"}",
+									"",
+									"",
+									"pm.test('Schema Validation', function() {",
+									"    ",
+									"    var result=tv4.validateResult(JSON.parse(responseBody), schema);",
+									"",
+									"    if(!result.valid){",
+									"        console.log(result);",
+									"    }",
+									"",
+									"    pm.expect(result.valid).to.be.true;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status",
+							"protocol": "https",
+							"host": [
+								"pivotus",
+								"qa",
+								"engage",
+								"pivotus",
+								"io"
+							],
+							"path": [
+								"api",
+								"auth",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c4da7d96-f7d3-419d-97f6-d72ef64eafc0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab7a4d95-3ad2-4738-9776-74a11ba723c7",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "94e1a76e-7a87-49c6-ae7b-650db4eb111f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "69ee9c0f-969f-4e83-8253-e806bf487c51",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

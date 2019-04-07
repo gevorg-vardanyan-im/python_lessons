@@ -1,0 +1,76 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "code",
+    "description",
+    "build"
+  ],
+  "properties": {
+    "code": {
+      "$id": "#/properties/code",
+      "type": "integer",
+      "title": "The Code Schema",
+      "default": 0,
+      "examples": [
+        200
+      ]
+    },
+    "description": {
+      "$id": "#/properties/description",
+      "type": "string",
+      "title": "The Description Schema",
+      "default": "",
+      "examples": [
+        "OK"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "build": {
+      "$id": "#/properties/build",
+      "type": "object",
+      "title": "The Build Schema",
+      "required": [
+        "artifact",
+        "version",
+        "buildNumber"
+      ],
+      "properties": {
+        "artifact": {
+          "$id": "#/properties/build/properties/artifact",
+          "type": "string",
+          "title": "The Artifact Schema",
+          "default": "",
+          "examples": [
+            "engage-authentication-service"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "version": {
+          "$id": "#/properties/build/properties/version",
+          "type": "string",
+          "title": "The Version Schema",
+          "default": "",
+          "examples": [
+            "1.17.1-SNAPSHOT"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "buildNumber": {
+          "$id": "#/properties/build/properties/buildNumber",
+          "type": "string",
+          "title": "The Buildnumber Schema",
+          "default": "",
+          "examples": [
+            "d0ea0ffc11-20190322_205420"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    }
+  }
+}
+

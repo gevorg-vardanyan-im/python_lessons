@@ -14,6 +14,7 @@ class Newman:
         self.__logger.addHandler(__handler)
         # define optional arguments
         self.optional_args = {'case': 'folder',
+                              'data': 'iteration-data',
                               'delay': 'delay-request',
                               'loops': 'iteration-count'
                               }
@@ -59,6 +60,7 @@ class Newman:
             -r cli,htmlextra \\
             --reporter-htmlextra-export $result_folder \\
             --export-collection $result_folder \\
+            --export-environment $result_folder \\
             --reporter-htmlextra-testPaging \\
             --reporter-htmlextra-title '$report_title' \\
             --color on \\
