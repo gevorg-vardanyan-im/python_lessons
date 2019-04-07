@@ -6,21 +6,27 @@ which should be used to execute API tests.
 
 import os
 import sys
+import re
 import argparse
 import datetime
 import colorlog
 import json
+from craft.utils import read_file
 
 
 # The following variables were made as argparser parameters help
-__help_case = 'Specific case name from the given suite.'
+__help_case = 'Specific case name from the given suite.\n' \
+              'Use whitespace to separate multiple cases\' names.'
 __help_loops = 'How many times a suite should be executed.'
-__help_delay = 'Explicit / additional delay in ms between resuests.'
+__help_delay = 'Explicit / additional delay between requests in ms.'
 __help_result = 'Directory where all the result files should be stored.'
 __help_template = 'HTML template that should be used '\
                   'to generate a report.'
 __help_email = 'Necessity of an email notification sending '\
                'after test execution.'
+__help_title = 'Name of the html report page.'
+# initial values
+__report_title = 'Engage API testing report'
 __envs = ['perf',
           'perf2',
           'qa',
@@ -34,6 +40,8 @@ __tenants = ['pivotus',
              'umpqua',
              'sns'
              ]
+# specific cases' names will be known when the suite is known
+__cases = []
 
 # define logger
 __logger = colorlog.getLogger()
@@ -41,6 +49,32 @@ __logger.setLevel(colorlog.colorlog.logging.DEBUG)
 __handler = colorlog.StreamHandler()
 __handler.setFormatter(colorlog.ColoredFormatter())
 __logger.addHandler(__handler)
+
+
+def detect_cases():
+
+    args = sys.argv[1:]
+    regex = re.compile(r'.(?<=suites/).*(?=.postman_collection.json)')
+    suite = ''
+    for arg in args:
+        if regex.search(arg):
+            suite = arg
+            break
+    if suite:
+        suite_s = read_file(suite)
+        json_dict = json.loads(suite_s)
+        items = json_dict['item']
+        for item in items:
+            __cases.append(item['name'])
+    else:
+        msg = 'No suite file was given.'
+        __logger.info(msg)
+        return
+
+    cases_s = "\n\t\t".join(__cases)
+    cases_info = '\n\tAvailable cases are the following:'\
+                 '\n\t\t{}'.format(cases_s)
+    __logger.info(cases_info)
 
 
 def parse_args():
@@ -59,7 +93,11 @@ def parse_args():
                         help="Tenant name.")
 
     group_run = parser.add_argument_group("Run parameters")
+    detect_cases()
     group_run.add_argument("--case",
+                           default=[],
+                           nargs='*',
+                           choices=__cases,
                            type=str,
                            help=__help_case)
     group_run.add_argument("--loops",
@@ -82,6 +120,9 @@ def parse_args():
     group_report.add_argument("--result_folder",
                               default=result_folder,
                               help=__help_result)
+    group_report.add_argument("--report_title",
+                              default=__report_title,
+                              help=__help_title)
 
     group_email = parser.add_argument_group("Email notification parameters")
     group_email.add_argument("--send_email",
@@ -135,32 +176,4 @@ def get_args():
     args.environment = env
     check_suite_file_path(args.suite)
     check_report_folder(args.result_folder)
-    # print(json.dumps(args, indent=4))
-    print(json.dumps(vars(args), indent=4))
     return args
-
-
-gago = 'GGGGGGGGGG jhdjhfvbl lg kbd g dhfgv '
-# print(gago.title())
-template = '''newman run \\
-            $suite \\
-            -e $environment \\
-            -r json,xml,html                        --folder get_message \\
-            --reporter-html-template $html_template \\
-            --reporter-json-export $result_folder \\
-            --reporter-xml-export $result_folder \\
-            --reporter-html-export $result_folder \\
-            --export-collection $result_folder \\
-            --verbose'''
-
-template += ' \\' + '\n\t\t\t' + gago
-template += ' \\' + '\n\t\t\t' + gago
-# print(template)
-
-
-extra = 'newman run suites/chat_service.postman_collection.json '\
-        '-e envs/qa_pivotus.postman_environment.json '\
-        '-r htmlextra '\
-        '--reporter-htmlextra-export results    '\
-        '--reporter-htmlextra-testPaging '\
-        '--reporter-htmlextra-title "Engage API testing"'

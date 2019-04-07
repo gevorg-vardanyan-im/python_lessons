@@ -11,7 +11,7 @@ from craft.newman import Newman
 
 def main():
 
-    print(os.path.dirname(os.path.realpath(__file__)))
+    # print(os.path.dirname(os.path.realpath(__file__)))
     args = get_args()
     args.root_dir = os.path.dirname(os.path.abspath(__file__))
 

@@ -1,7 +1,3 @@
-import os
-import datetime
-import time
-import re
 import colorlog
 from craft.utils import run_command
 from string import Template
@@ -11,55 +7,63 @@ class Newman:
     def __init__(self, args):
         self.args = args
         # define logger
-        self.logger = colorlog.getLogger()
-        self.logger.setLevel(colorlog.colorlog.logging.DEBUG)
-        handler = colorlog.StreamHandler()
-        handler.setFormatter(colorlog.ColoredFormatter())
-        self.logger.addHandler(handler)
+        self.__logger = colorlog.getLogger()
+        self.__logger.setLevel(colorlog.colorlog.logging.DEBUG)
+        __handler = colorlog.StreamHandler()
+        __handler.setFormatter(colorlog.ColoredFormatter())
+        self.__logger.addHandler(__handler)
+        # define optional arguments
+        self.optional_args = {'case': 'folder',
+                              'delay': 'delay-request',
+                              'loops': 'iteration-count'
+                              }
 
-    def prepare(self):
+    def __check_args(self):
+        '''
+        This function checks for additional arguments.
+        '''
+
         args = vars(self.args)
-        optional_args = ['case',
-                         'delay',
-                         'loops'
-                         ]
-        for option in optional_args:
-            if option in args:
-                if args[option]:
-                    optional = ' \\' + '\n\t\t\t' + str(args[option])
-                    print(optional)
-                print(option, args[option])
-
-        # prepare env file location
-        # sute location
-        # report template location
-
-        # self.start_time = datetime.datetime.now()
-        # if not os.path.exists(self.args.results):
-        #     os.makedirs(self.args.results)
-        # if self.args.delay != 0:
-        #     # Delay by minute before testing
-        #     print WAITING_START_MESSAGE.format(str(self.args.delay))
-        #     time.sleep(60 * float(self.args.delay))
-        #     print WAITING_END_MESSAGE
-        return
+        # accodance between usual and newman's terms
+        additional_options = ''
+        options_tmpl = ' \\' + '\n\t\t --{val} ${key}'
+        case_tmpl = ' \\' + '\n\t\t --{val} {case}'
+        for key, val in self.optional_args.items():
+            if key in args:
+                if args[key]:
+                    if key == 'case':
+                        for case in args[key]:
+                            additional_options += case_tmpl.format(val=val,
+                                                                   case=case)
+                        # self.args.case = opt
+                    else:
+                        additional_options += options_tmpl.format(val=val,
+                                                                  key=key)
+            else:
+                warn = 'Args dictionary does not contain '\
+                       '\'{}\' argument.'.format(key)
+                self.__logger.warning(warn)
+        return additional_options
 
     def run(self):
-        self.prepare()
+        '''
+        This function initiates the newman execution
+        with the given arguments.
+        '''
 
         args_dict = self.args.__dict__
-        template = '''newman run \\
+        additional_args = self.__check_args()
+        main_template = '''newman run \\
             $suite \\
             -e $environment \\
             -r cli,htmlextra \\
             --reporter-htmlextra-export $result_folder \\
             --export-collection $result_folder \\
             --reporter-htmlextra-testPaging \\
-            --reporter-htmlextra-title 'Engage API testing report' \\
+            --reporter-htmlextra-title '$report_title' \\
             --color on \\
             --verbose'''
+        full_template = main_template + additional_args
 
-# json-summary --reporter-json-summary-export $result_folder \\
-# -- newman-reporter-xml-export $result_folder \\
-        command = Template(template).substitute(args_dict)
+        command = Template(full_template).substitute(args_dict)
         run_command(command)
