@@ -1,0 +1,18 @@
+total 64
+drwxr-xr-x 13 gevorg_v instigatemobile 4096 Ապր  4 12:56 ./
+drwxr-xr-x  9 gevorg_v instigatemobile 4096 Մար  7 13:47 ../
+drwxr-xr-x  3 gevorg_v instigatemobile 4096 Ապր  2 17:29 craft/
+drwxr-xr-x  2 gevorg_v instigatemobile 4096 Մար 28 08:57 envs/
+drwxr-xr-x  3 gevorg_v instigatemobile 4096 Մար 27 15:38 home_npm/
+-rw-r--r--  1 gevorg_v instigatemobile    0 Ապր  4 08:55 jmeter.log
+drwxr-xr-x  2 gevorg_v instigatemobile 4096 Ապր  4 15:06 newman/
+drwxr-xr-x 30 gevorg_v instigatemobile 4096 Մար 27 16:32 node_modules/
+lrwxrwxrwx  1 gevorg_v instigatemobile   38 Մար 27 15:36 npm -> ../lib/node_modules/npm/bin/npm-cli.js
+drwxr-xr-x  2 gevorg_v instigatemobile 4096 Ապր  1 11:40 old/
+-rw-r--r--  1 gevorg_v instigatemobile 7610 Մար 27 16:32 package-lock.json
+drwxr-xr-x  4 gevorg_v instigatemobile 4096 Մար 29 09:25 Postman/
+drwxr-xr-x 18 gevorg_v instigatemobile 4096 Ապր  5 08:37 results/
+-rw-r--r--  1 gevorg_v instigatemobile  759 Ապր  2 17:22 run.py
+drwxr-xr-x  2 gevorg_v instigatemobile 4096 Ապր  4 10:13 suites/
+drwxr-xr-x  2 gevorg_v instigatemobile 4096 Ապր  2 09:46 templates/
+drwxr-xr-x  2 gevorg_v instigatemobile 4096 Մար 27 15:37 usr_local_bin_npm/

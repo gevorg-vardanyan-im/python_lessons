@@ -1,6 +1,7 @@
-import colorlog
 from craft.utils import run_command
 from string import Template
+from craft.testrail import *
+import colorlog
 
 
 class Newman:
@@ -68,4 +69,5 @@ class Newman:
         full_template = main_template + additional_args
 
         command = Template(full_template).substitute(args_dict)
-        run_command(command)
+        # run_command(command)
+        print(command)

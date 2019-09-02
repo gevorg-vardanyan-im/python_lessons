@@ -11,6 +11,7 @@ import argparse
 import datetime
 import colorlog
 import json
+from collections import OrderedDict
 from craft.utils import read_file
 
 
@@ -45,6 +46,7 @@ __tenants = ['pivotus',
              ]
 # specific cases' names will be known when the suite is known
 __cases = []
+__cases_ids = OrderedDict()
 
 # define logger
 __logger = colorlog.getLogger()
@@ -52,6 +54,39 @@ __logger.setLevel(colorlog.colorlog.logging.DEBUG)
 __handler = colorlog.StreamHandler()
 __handler.setFormatter(colorlog.ColoredFormatter())
 __logger.addHandler(__handler)
+
+
+def retrieve_case_id(desc):
+    regex = re.compile(r'.(?<=Test case id is \"\d).*(?=\".)')
+    exp_id = regex.search(str(desc))
+    if exp_id:
+        return exp_id.group()
+    else:
+        return 'No case id was detected.'
+
+
+def detect_testrail_ids():
+
+    args = sys.argv[1:]
+    regex = re.compile(r'.(?<=suites/).*(?=.postman_collection.json)')
+    suite = ''
+    for arg in args:
+        if regex.search(arg):
+            suite = arg
+            break
+    if suite:
+        suite_s = read_file(suite)
+        json_dict = json.loads(suite_s)
+        items = json_dict['item']
+        for item in items:
+            case_id = retrieve_case_id(item['description'])
+            __cases_ids.update({item['name']: str(case_id)})
+    else:
+        msg = 'No suite file was given.'
+        __logger.info(msg)
+        return
+
+    print(json.dumps(__cases_ids, indent=4))
 
 
 def detect_cases():
@@ -68,16 +103,21 @@ def detect_cases():
         json_dict = json.loads(suite_s)
         items = json_dict['item']
         for item in items:
+            case_id = retrieve_case_id(item['description'])
             __cases.append(item['name'])
+            __cases_ids.update({item['name']: str(case_id)})
     else:
         msg = 'No suite file was given.'
         __logger.info(msg)
         return
 
+    # __cases = list(__cases_ids.keys())
+    print('\n', __cases)
     cases_s = "\n\t\t".join(__cases)
     cases_info = '\n\tAvailable cases are the following:'\
                  '\n\t\t{}'.format(cases_s)
     __logger.info(cases_info)
+    print(json.dumps(__cases_ids, indent=4))
 
 
 def parse_args():
@@ -97,6 +137,7 @@ def parse_args():
 
     group_run = parser.add_argument_group("Run parameters")
     detect_cases()
+    # detect_testrail_ids()
     group_run.add_argument("--case",
                            default=[],
                            nargs='*',

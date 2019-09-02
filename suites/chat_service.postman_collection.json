@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "952eab1e-1d58-4332-aedd-550dc20ca60e",
+		"_postman_id": "1240dbac-06ad-444b-9775-acc3006abc30",
 		"name": "chat_service",
 		"description": "This description is intended for chat service API requests' testing.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -121,7 +121,8 @@
 									"console.log(\"log\")",
 									"console.info(\"info\")",
 									"console.warn(\"warn\")",
-									"console.error(\"error\")"
+									"console.error(\"error\")",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -135,7 +136,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status",
+							"raw": "https://pivotus.qa.engage.pivotus.io/api/auth/status?name={{name}}",
 							"protocol": "https",
 							"host": [
 								"pivotus",
@@ -148,6 +149,12 @@
 								"api",
 								"auth",
 								"status"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{name}}"
+								}
 							]
 						},
 						"description": "This API request gets a status of the specific service."
@@ -166,7 +173,7 @@
 									"",
 									"var jsonData = JSON.parse(responseBody);",
 									"",
-									"pm.test(\"check access token\", function() {",
+									"pm.test(\"check access token\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.accessToken).not.eql(null);",
 									"    pm.expect(jsonData.accessToken).not.eql(\"\");",
@@ -235,7 +242,12 @@
 									"pm.test(\"check_created_agent_id\", function () {",
 									"    pm.expect(agent_id).to.match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/);",
 									"});",
-									""
+									"",
+									"",
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
 								],
 								"type": "text/javascript"
 							}
@@ -326,7 +338,13 @@
 									"    pm.expect(customer_id).to.match(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/);",
 									"});",
 									"",
-									""
+									"",
+									"",
+									"",
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
 								],
 								"type": "text/javascript"
 							}
@@ -413,7 +431,9 @@
 									"});",
 									"",
 									"pm.environment.set(\"customer_access_token\", jsonData.accessToken);",
-									""
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
 								],
 								"type": "text/javascript"
 							}
@@ -478,7 +498,9 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									""
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
 								],
 								"type": "text/javascript"
 							}
@@ -557,7 +579,10 @@
 									"    console.log(\"---catch section---\")",
 									"    console.log(err);",
 									"}",
-									""
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
 								],
 								"type": "text/javascript"
 							}
@@ -622,7 +647,11 @@
 									"});",
 									"",
 									"var response = JSON.parse(responseBody);",
-									""
+									"// console.log(response)",
+									"",
+									"",
+									"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+									"tests[\"[INFO] Response: \" + responseBody] = true;"
 								],
 								"type": "text/javascript"
 							}
@@ -680,7 +709,7 @@
 							"script": {
 								"id": "170d89bc-6373-4356-94ac-ac50f21721e4",
 								"exec": [
-									""
+									"// tests[`[INFO] Request params: ${JSON.stringify(request.data)}`] = true;"
 								],
 								"type": "text/javascript"
 							}
@@ -713,6 +742,7 @@
 					"response": []
 				}
 			],
+			"description": "Test case id is \"311\".",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -750,8 +780,6 @@
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
 									"});",
-									"",
-									"",
 									"",
 									"",
 									"schema = {",
@@ -840,7 +868,11 @@
 									"    }",
 									"",
 									"    pm.expect(result.valid).to.be.true;",
-									"})"
+									"})",
+									"",
+									"pm.test(\"C311 check_status_code_is_201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -880,7 +912,7 @@
 							"script": {
 								"id": "c0eae1d4-3ff2-42cc-a94b-9512303a4d10",
 								"exec": [
-									"pm.test(\"check_status_code\", function () {",
+									"pm.test(\"C311 check_status_code\", function () {",
 									"    pm.response.to.have.status(301);",
 									"});"
 								],
@@ -925,6 +957,7 @@
 					"response": []
 				}
 			],
+			"description": "Test case id is \"312\".",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -1214,6 +1247,7 @@
 					"response": []
 				}
 			],
+			"description": "Test case id is \"313\".",
 			"event": [
 				{
 					"listen": "prerequest",
